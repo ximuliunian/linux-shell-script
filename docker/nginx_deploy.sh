@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # 检查参数数量
-if [ $# -ne 3 ]; then
-    echo "用法: $0 <挂载目录> <监听端口> <容器名称>"
-    echo "例子: $0 ~/apps/nginx 8080 nginx"
+if [ $# -ne 4 ]; then
+    echo "用法: $0 <挂载目录> <监听端口> <容器名称> <镜像名称>"
+    echo "例子: $0 ~/apps/nginx 8080 nginx nginx:latest"
     echo "前置条件:"
     echo "  1. 具备 Docker 环境"
     echo "  2. 已拉取 Nginx 镜像（docker pull nginx）"
@@ -14,6 +14,7 @@ fi
 MOUNT_DIR=$1
 HOST_PORT=$2
 NGINX_NAME=$3
+NGINX_IMAGE=$4
 
 # 创建挂载目录结构
 echo "正在创建挂载目录..."
@@ -28,7 +29,7 @@ docker rm "${NGINX_NAME}" 2>/dev/null || true
 
 # 创建临时容器用于提取配置文件
 echo "正在创建临时容器以提取配置文件..."
-docker create --name temp-nginx nginx > /dev/null
+docker create --name temp-nginx "${NGINX_IMAGE}" > /dev/null
 docker start temp-nginx > /dev/null
 
 # 从临时容器复制配置文件和目录
@@ -51,8 +52,9 @@ docker run -d \
     -v "${MOUNT_DIR}/conf/conf.d:/etc/nginx/conf.d" \
     -v "${MOUNT_DIR}/log:/var/log/nginx" \
     -v "${MOUNT_DIR}/html:/usr/share/nginx/html" \
-    nginx
+    "${NGINX_IMAGE}"
 
 echo "✅ Nginx容器已启动"
 echo "   宿主机访问端口: ${HOST_PORT}"
 echo "   挂载目录: ${MOUNT_DIR}"
+echo "   使用镜像: ${NGINX_IMAGE}"
