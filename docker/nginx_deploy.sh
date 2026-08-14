@@ -19,6 +19,7 @@ NGINX_IMAGE=$4
 # 创建挂载目录结构
 echo "正在创建挂载目录..."
 mkdir -p "${MOUNT_DIR}/conf"
+mkdir -p "${MOUNT_DIR}/conf/ssl"
 mkdir -p "${MOUNT_DIR}/log"
 mkdir -p "${MOUNT_DIR}/html"
 
@@ -50,6 +51,7 @@ docker run -d \
     --name "${NGINX_NAME}" \
     -v "${MOUNT_DIR}/conf/nginx.conf:/etc/nginx/nginx.conf" \
     -v "${MOUNT_DIR}/conf/conf.d:/etc/nginx/conf.d" \
+    -v "${MOUNT_DIR}/conf/ssl:/etc/nginx/ssl" \
     -v "${MOUNT_DIR}/log:/var/log/nginx" \
     -v "${MOUNT_DIR}/html:/usr/share/nginx/html" \
     "${NGINX_IMAGE}"
