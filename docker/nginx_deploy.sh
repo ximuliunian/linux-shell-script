@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # 检查参数数量
-if [ $# -ne 4 ]; then
-    echo "用法: $0 <挂载目录> <监听端口> <容器名称> <镜像名称>"
-    echo "例子: $0 ~/apps/nginx 8080 nginx nginx:latest"
+if [ $# -ne 5 ]; then
+    echo "用法: $0 <挂载目录> <监听80端口> <监听443端口> <容器名称> <镜像名称>"
+    echo "例子: $0 ~/apps/nginx 80 443 nginx nginx:latest"
     echo "前置条件:"
     echo "  1. 具备 Docker 环境"
     echo "  2. 已拉取 Nginx 镜像（docker pull nginx）"
@@ -12,9 +12,10 @@ fi
 
 # 定义变量
 MOUNT_DIR=$1
-HOST_PORT=$2
-NGINX_NAME=$3
-NGINX_IMAGE=$4
+HOST_PORT_80=$2
+HOST_PORT_443=$3
+NGINX_NAME=$4
+NGINX_IMAGE=$5
 
 # 创建挂载目录结构
 echo "正在创建挂载目录..."
@@ -47,7 +48,8 @@ docker rm temp-nginx > /dev/null
 # 运行最终的nginx容器
 echo "正在启动nginx容器..."
 docker run -d \
-    -p "${HOST_PORT}:80" \
+    -p "${HOST_PORT_80}:80" \
+    -p "${HOST_PORT_443}:443" \
     --name "${NGINX_NAME}" \
     -v "${MOUNT_DIR}/conf/nginx.conf:/etc/nginx/nginx.conf" \
     -v "${MOUNT_DIR}/conf/conf.d:/etc/nginx/conf.d" \
@@ -57,6 +59,7 @@ docker run -d \
     "${NGINX_IMAGE}"
 
 echo "✅ Nginx容器已启动"
-echo "   宿主机访问端口: ${HOST_PORT}"
+echo "   宿主机访问80端口: ${HOST_PORT_80}"
+echo "   宿主机访问443端口: ${HOST_PORT_443}"
 echo "   挂载目录: ${MOUNT_DIR}"
 echo "   使用镜像: ${NGINX_IMAGE}"
