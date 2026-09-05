@@ -7,7 +7,7 @@ volumes:
   # 数据持久化目录
   - "${MOUNT_DIR}/storage:/qdrant/storage"
   # 配置文件
-  - "${MOUNT_DIR}/config.yaml:/qdrant/config/production.yaml"
+  - "${MOUNT_DIR}/config:/qdrant/config"
 environment:
   - TZ=Asia/Shanghai
     # API Key 用于认证请求
