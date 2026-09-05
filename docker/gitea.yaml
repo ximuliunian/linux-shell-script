@@ -1,0 +1,13 @@
+image: gitea/gitea:latest
+container_name: gitea
+ports:
+  # Web端口
+  - "${PORT_3000}:3000"
+  # SSH端口
+  - "${PORT_22}:22"
+volumes:
+  # 数据目录
+  - "${MOUNT_DIR}:/data"
+environment:
+  # 数据库类型
+  - GITEA__database__DB_TYPE=sqlite3

@@ -1,0 +1,16 @@
+image: mysql:8.0.33
+container_name: mysql
+ports:
+  - "${PORT_3306}:3306"
+volumes:
+  # 配置文件
+  - "${MOUNT_DIR}/conf/my.cnf:/etc/mysql/my.cnf"
+  # 配置目录
+  - "${MOUNT_DIR}/conf/conf.d:/etc/mysql/conf.d"
+  # 数据目录
+  - "${MOUNT_DIR}/data:/var/lib/mysql"
+  # 日志目录
+  - "${MOUNT_DIR}/log:/var/log/mysql"
+environment:
+  # Root密码
+  - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PWD}

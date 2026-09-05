@@ -1,0 +1,16 @@
+image: nginx:latest
+container_name: nginx
+ports:
+  - "${PORT_80}:80"
+  - "${PORT_443}:443"
+volumes:
+  # 配置
+  - "${MOUNT_DIR}/conf/nginx.conf:/etc/nginx/nginx.conf"
+  # 配置目录
+  - "${MOUNT_DIR}/conf/conf.d:/etc/nginx/conf.d"
+  # SSL目录
+  - "${MOUNT_DIR}/conf/ssl:/etc/nginx/ssl"
+  # 日志目录
+  - "${MOUNT_DIR}/log:/var/log/nginx"
+  # HTML目录
+  - "${MOUNT_DIR}/html:/usr/share/nginx/html"

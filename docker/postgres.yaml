@@ -1,0 +1,17 @@
+image: postgres:16
+container_name: postgres
+ports:
+    - "${PORT_5432}:5432"
+volumes:
+    # 数据持久化目录
+    - "${MOUNT_DIR}/data:/var/lib/postgresql/data"
+    # 配置文件
+    - "${MOUNT_DIR}/conf:/etc/postgresql/conf.d"
+environment:
+    - TZ=Asia/Shanghai
+    # 数据库用户名
+    - POSTGRES_USER=${POSTGRES_USER}
+    # 数据库密码
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    # 数据库名称
+    - POSTGRES_DB=${POSTGRES_DB}
